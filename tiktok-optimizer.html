@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TikTok 1080p Optimizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --b50:#eff6ff;--b100:#dbeafe;--b200:#bfdbfe;--b300:#93c5fd;--b400:#60a5fa;
+  --b500:#3b82f6;--b600:#2563eb;--b700:#1d4ed8;--b900:#1e3a8a;
+  --g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;
+  --g400:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-border:#bbf7d0;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --r:8px;--r-lg:14px;--r-xl:18px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05);
+}
+html{font-size:16px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g50);color:var(--g900);min-height:100vh;padding:2.5rem 1rem 5rem}
+.container{max-width:760px;margin:0 auto}
+
+/* Header */
+header{text-align:center;margin-bottom:2rem}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:.75rem}
+.logo-icon{width:44px;height:44px;background:var(--b600);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:-.5px;color:var(--g900)}
+.logo-text span{color:var(--b600)}
+h1{font-size:28px;font-weight:800;color:var(--g900);letter-spacing:-.8px;margin-bottom:6px}
+.tagline{font-size:13px;color:var(--g400);font-family:'DM Mono',monospace}
+.badge-browser{display:inline-flex;align-items:center;gap:6px;background:var(--b50);border:1px solid var(--b200);border-radius:99px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--b700);margin-top:10px}
+.badge-browser svg{width:12px;height:12px;stroke:var(--b500);fill:none;stroke-width:2;stroke-linecap:round}
+
+/* Cards */
+.card{background:#fff;border:1px solid var(--g200);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.card-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--b600)}
+.card-badge{font-size:11px;font-family:'DM Mono',monospace;color:var(--g400);background:var(--g100);border-radius:99px;padding:3px 10px}
+
+/* Tabs */
+.tab-row{display:flex;gap:4px;background:var(--g100);border-radius:var(--r);padding:3px;margin-bottom:1.25rem}
+.tab{flex:1;padding:7px 12px;font-size:13px;font-weight:600;color:var(--g500);border:none;background:none;border-radius:6px;cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.tab.active{background:#fff;color:var(--b600);box-shadow:var(--shadow)}
+
+/* Drop zone */
+.dropzone{border:1.5px dashed var(--b200);border-radius:var(--r);background:var(--b50);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;position:relative;transition:border-color .15s,background .15s}
+.dropzone:hover,.dropzone.over{border-color:var(--b400);background:var(--b100)}
+.dropzone input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.drop-icon{width:48px;height:48px;background:var(--b100);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.drop-icon svg{width:24px;height:24px;stroke:var(--b500);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dropzone p{font-size:15px;font-weight:600;color:var(--g700)}
+.dropzone small{font-size:12px;color:var(--g400);margin-top:4px;display:block}
+
+/* Video preview */
+#videoWrap{position:relative;background:#000;border-radius:var(--r);overflow:hidden;margin-bottom:1rem;display:none}
+#videoWrap video{width:100%;display:block;max-height:320px;object-fit:contain}
+.video-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);opacity:0;transition:opacity .2s;cursor:pointer}
+#videoWrap:hover .video-overlay{opacity:1}
+.play-btn{width:52px;height:52px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.play-btn svg{width:20px;height:20px;fill:var(--g900);stroke:none;margin-left:3px}
+
+/* Trim slider */
+.trim-section{margin-bottom:1rem}
+.trim-label{display:flex;justify-content:space-between;font-size:12px;color:var(--g500);font-family:'DM Mono',monospace;margin-bottom:6px}
+.trim-track{position:relative;height:36px;background:var(--g100);border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid var(--g200)}
+.trim-fill{position:absolute;top:0;bottom:0;background:var(--b200)}
+.trim-handle{position:absolute;top:0;bottom:0;width:12px;background:var(--b600);border-radius:3px;cursor:ew-resize;display:flex;align-items:center;justify-content:center}
+.trim-handle::after{content:'';width:2px;height:14px;background:rgba(255,255,255,.7);border-radius:1px}
+#trimStart{left:0;border-radius:6px 0 0 6px}
+#trimEnd{right:0;border-radius:0 6px 6px 0}
+.waveform{position:absolute;inset:0;display:flex;align-items:center;gap:1px;padding:0 16px}
+.wave-bar{flex:1;background:var(--b300);border-radius:1px;opacity:.5}
+
+/* Grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* Fields */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--g500)}
+.field select,.field input[type=number],.field input[type=range]{width:100%}
+.field select,.field input[type=number]{padding:8px 10px;border:1px solid var(--g200);border-radius:var(--r);font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--g900);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.field select:focus,.field input[type=number]:focus{border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+.field input[type=range]{-webkit-appearance:none;height:4px;background:var(--g200);border-radius:99px;outline:none;margin-top:4px}
+.field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--b600);border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--b400)}
+.range-val{font-size:11px;font-family:'DM Mono',monospace;color:var(--b600);font-weight:500;text-align:right}
+
+/* Preset pills */
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.preset-btn{padding:6px 14px;border:1.5px solid var(--g200);border-radius:99px;font-size:12px;font-weight:600;color:var(--g500);background:#fff;cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.preset-btn:hover{border-color:var(--b300);color:var(--b600);background:var(--b50)}
+.preset-btn.active{border-color:var(--b600);color:var(--b600);background:var(--b50)}
+
+/* Divider */
+.divider{height:1px;background:var(--g100);margin:1.25rem 0}
+
+/* Stats */
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+.stat{background:var(--g50);border:1px solid var(--g100);border-radius:var(--r);padding:10px;text-align:center}
+.stat-val{font-size:16px;font-weight:700;color:var(--g900)}
+.stat-key{font-size:10px;font-family:'DM Mono',monospace;color:var(--g400);margin-top:2px}
+.stat.highlight{background:var(--b50);border-color:var(--b200)}
+.stat.highlight .stat-val{color:var(--b700)}
+
+/* Bitrate estimator */
+.bitrate-bar-wrap{margin:10px 0}
+.bitrate-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:12px}
+.bitrate-label{width:110px;color:var(--g500);flex-shrink:0}
+.bitrate-track{flex:1;height:8px;background:var(--g100);border-radius:99px;overflow:hidden}
+.bitrate-fill{height:8px;border-radius:99px;transition:width .4s}
+.bitrate-num{width:60px;text-align:right;font-family:'DM Mono',monospace;color:var(--g700);font-size:11px}
+
+/* Progress */
+.progress-wrap{margin:1rem 0}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;color:var(--g500);margin-bottom:6px;font-family:'DM Mono',monospace}
+.bar-bg{height:8px;background:var(--g100);border-radius:99px;overflow:hidden}
+.bar{height:8px;background:linear-gradient(90deg,var(--b500),var(--b400));border-radius:99px;width:0;transition:width .3s ease}
+.bar.done{background:linear-gradient(90deg,var(--green),#4ade80)}
+.speed-row{display:flex;gap:16px;margin-top:8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--g400)}
+
+/* Log */
+.log-wrap{margin-top:10px}
+.log-toggle{font-size:11px;color:var(--b500);cursor:pointer;font-weight:600;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;padding:0}
+.log{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--g400);line-height:1.7;max-height:120px;overflow-y:auto;margin-top:6px;background:var(--g900);color:#7dd3fc;border-radius:var(--r);padding:10px 12px;display:none}
+.log.open{display:block}
+
+/* Encode summary */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--g100);font-size:13px}
+.summary-row:last-child{border-bottom:none}
+.summary-key{color:var(--g500)}
+.summary-val{font-weight:600;color:var(--g900);font-family:'DM Mono',monospace;font-size:12px}
+.size-comparison{display:flex;align-items:center;gap:12px;padding:12px;background:var(--g50);border-radius:var(--r);border:1px solid var(--g200);margin:1rem 0}
+.size-box{text-align:center;flex:1}
+.size-num{font-size:18px;font-weight:700;color:var(--g900)}
+.size-lbl{font-size:10px;color:var(--g400);font-family:'DM Mono',monospace;margin-top:2px}
+.size-arrow{color:var(--g300);font-size:20px}
+.size-change{text-align:center;padding:6px 12px;border-radius:var(--r);font-size:12px;font-weight:700;font-family:'DM Mono',monospace}
+.size-change.smaller{background:var(--green-bg);color:var(--green)}
+.size-change.bigger{background:var(--red-bg);color:var(--red)}
+
+/* Buttons */
+.btn-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:var(--r);padding:10px 20px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .15s;border:none;text-decoration:none;white-space:nowrap}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.btn-primary{background:var(--b600);color:#fff}
+.btn-primary:hover{background:var(--b700)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{background:#fff;color:var(--g700);border:1px solid var(--g200)}
+.btn-ghost:hover{background:var(--g50);border-color:var(--g300)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#15803d}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:4px 10px;font-size:11px;font-weight:700}
+.badge svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.badge-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-error{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+/* Section sep */
+.section-sep{display:flex;align-items:center;gap:10px;margin:1.25rem 0}
+.section-sep span{font-size:11px;font-weight:700;color:var(--g400);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.section-sep::before,.section-sep::after{content:'';flex:1;height:1px;background:var(--g100)}
+
+/* Tip */
+.tip{display:flex;gap:10px;align-items:flex-start;background:var(--b50);border:1px solid var(--b100);border-radius:var(--r);padding:10px 13px;font-size:12.5px;color:var(--b700);line-height:1.55}
+.tip svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;stroke:var(--b500);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Filter preview strip */
+.filter-preview{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:4px}
+.filter-thumb{flex-shrink:0;width:60px;text-align:center;cursor:pointer}
+.filter-thumb-img{width:60px;height:60px;border-radius:6px;background:var(--g200);border:2px solid transparent;overflow:hidden;margin-bottom:4px;position:relative}
+.filter-thumb-img canvas{width:100%;height:100%;display:block}
+.filter-thumb-img.selected{border-color:var(--b500)}
+.filter-thumb-label{font-size:9px;color:var(--g500);font-family:'DM Mono',monospace}
+
+/* Hidden */
+.hidden{display:none!important}
+
+/* Footer */
+footer{text-align:center;margin-top:2rem;font-size:11px;color:var(--g400);font-family:'DM Mono',monospace}
+
+/* Responsive */
+@media(max-width:540px){
+  .grid2,.grid3,.stats4{grid-template-columns:1fr 1fr}
+  .stats4{grid-template-columns:1fr 1fr}
+  h1{font-size:22px}
+}
+@media(max-width:380px){
+  .grid2,.grid3,.stats4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M15 10l-4 4 6 6 4-16L3 11l4 2 2 6 3-4"/></svg>
+    </div>
+    <span class="logo-text">Tik<span>Boost</span></span>
+  </div>
+  <h1>TikTok 1080p Optimizer</h1>
+  <p class="tagline">// bypass compression · preserve full quality · 100% local</p>
+  <div class="badge-browser">
+    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Runs entirely in your browser — no uploads, no servers
+  </div>
+</header>
+
+<!-- STEP 1: File -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">1 · Source video</span>
+    <span class="card-badge" id="fileStatus">no file selected</span>
+  </div>
+  <div class="dropzone" id="dropzone">
+    <input type="file" accept="video/*" id="fileInput"/>
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4M10 10l2-2 2 2M12 8v5"/></svg>
+    </div>
+    <p>Drop your video here or click to browse</p>
+    <small>MP4 · MOV · AVI · MKV · WebM — any size</small>
+  </div>
+
+  <div id="videoSection" class="hidden" style="margin-top:1rem">
+    <div id="videoWrap">
+      <video id="videoPlayer" preload="metadata"></video>
+      <div class="video-overlay" id="playOverlay">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats4" id="videoStats">
+      <div class="stat"><div class="stat-val" id="sv-dur">—</div><div class="stat-key">duration</div></div>
+      <div class="stat"><div class="stat-val" id="sv-res">—</div><div class="stat-key">resolution</div></div>
+      <div class="stat"><div class="stat-val" id="sv-size">—</div><div class="stat-key">file size</div></div>
+      <div class="stat"><div class="stat-val" id="sv-fps">—</div><div class="stat-key">frame rate</div></div>
+    </div>
+
+    <div class="trim-section">
+      <div class="trim-label">
+        <span>Trim: <span id="trimStartLabel">0:00</span></span>
+        <span><span id="trimEndLabel">0:00</span></span>
+      </div>
+      <div class="trim-track" id="trimTrack">
+        <div class="trim-fill" id="trimFill"></div>
+        <div class="waveform" id="waveform"></div>
+        <div class="trim-handle" id="trimStart" style="left:0"></div>
+        <div class="trim-handle" id="trimEnd" style="right:0"></div>
+      </div>
+      <div class="trim-label" style="margin-top:6px">
+        <span style="font-size:11px;color:var(--g400)">Drag handles to trim · leave both ends to keep full video</span>
+        <span id="trimDur" style="font-size:11px;color:var(--b600);font-weight:600"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: Platform preset -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">2 · Platform preset</span>
+  </div>
+  <div class="presets">
+    <button class="preset-btn active" data-preset="tiktok-v">TikTok Vertical</button>
+    <button class="preset-btn" data-preset="tiktok-h">TikTok Horizontal</button>
+    <button class="preset-btn" data-preset="yt-shorts">YT Shorts</button>
+    <button class="preset-btn" data-preset="ig-reels">Instagram Reels</button>
+    <button class="preset-btn" data-preset="custom">Custom</button>
+  </div>
+  <div class="tip">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="presetTip">Vertical 1080×1920 at CRF 18 — optimal settings for TikTok's encoder pipeline. Your video stays sharp after their re-compression pass.</span>
+  </div>
+</div>
+
+<!-- STEP 3: Video settings -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">3 · Video settings</span>
+    <button class="tab" id="toggleAdvanced" style="font-size:11px;padding:4px 10px;background:var(--g100);border:none;border-radius:99px;color:var(--g500);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600">+ Advanced</button>
+  </div>
+
+  <div class="grid2" style="margin-bottom:10px">
+    <div class="field">
+      <label>Resolution</label>
+      <select id="res">
+        <option value="1080x1920">1080×1920 — Vertical 1080p</option>
+        <option value="1920x1080">1920×1080 — Horizontal 1080p</option>
+        <option value="1080x1080">1080×1080 — Square</option>
+        <option value="720x1280">720×1280 — Vertical 720p</option>
+        <option value="1280x720">1280×720 — Horizontal 720p</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Codec</label>
+      <select id="codec">
+        <option value="libx264">H.264 — Best TikTok compat</option>
+        <option value="libx265">H.265 — Smaller file</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="field">
+      <label>CRF Quality</label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="range" id="crfRange" min="12" max="28" value="18" style="flex:1"/>
+        <span class="range-val" id="crfVal">18</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Encode Preset</label>
+      <select id="preset">
+        <option value="slow">slow — best quality</option>
+        <option value="medium" selected>medium — balanced</option>
+        <option value="fast">fast — quicker</option>
+        <option value="ultrafast">ultrafast — fastest</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Frame Rate</label>
+      <select id="fps">
+        <option value="source">Source (keep)</option>
+        <option value="60">60 fps</option>
+        <option value="30">30 fps</option>
+        <option value="24">24 fps</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="advancedPanel" class="hidden">
+    <div class="section-sep"><span>Advanced video</span></div>
+    <div class="grid3" style="margin-bottom:10px">
+      <div class="field">
+        <label>Profile</label>
+        <select id="profile">
+          <option value="high">high</option>
+          <option value="main">main</option>
+          <option value="baseline">baseline</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Level</label>
+        <select id="level">
+          <option value="4.1">4.1</option>
+          <option value="4.2">4.2</option>
+          <option value="5.0">5.0</option>
+          <option value="5.1">5.1</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pixel format</label>
+        <select id="pixfmt">
+          <option value="yuv420p">yuv420p (standard)</option>
+          <option value="yuv444p">yuv444p (higher color)</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Max bitrate (kbps) <span style="color:var(--g400);font-weight:400">0 = auto</span></label>
+        <input type="number" id="maxBitrate" value="0" min="0" max="50000" step="500"/>
+      </div>
+      <div class="field">
+        <label>Buffer size (kbps)</label>
+        <input type="number" id="bufSize" value="0" min="0" max="100000" step="1000"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: Audio & Filters -->
+<div class="card">
+  <div class="card-header"><span class="card-title">4 · Audio & color</span></div>
+
+  <div class="tab-row" id="acTabs">
+    <button class="tab active" data-ac="audio">Audio</button>
+    <button class="tab" data-ac="color">Color grading</button>
+    <button class="tab" data-ac="sharpen">Sharpen / denoise</button>
+  </div>
+
+  <div id="ac-audio">
+    <div class="grid3">
+      <div class="field">
+        <label>Audio codec</label>
+        <select id="acodec">
+          <option value="aac">AAC (recommended)</option>
+          <option value="copy">Copy (no re-encode)</option>
+          <option value="libmp3lame">MP3</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Audio bitrate</label>
+        <select id="abitrate">
+          <option value="320k">320k — highest</option>
+          <option value="192k" selected>192k — high</option>
+          <option value="128k">128k — standard</option>
+          <option value="96k">96k — small</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sample rate</label>
+        <select id="samplerate">
+          <option value="48000">48000 Hz</option>
+          <option value="44100" selected>44100 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="field">
+        <label>Volume boost</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="volRange" min="50" max="200" value="100" style="flex:1"/>
+          <span class="range-val" id="volVal">100%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ac-color" class="hidden">
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="field">
+        <label>Brightness</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="brightness" min="-0.5" max="0.5" step="0.01" value="0" style="flex:1"/>
+          <span class="range-val" id="brightnessVal">0</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Contrast</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="contrast" min="-1" max="1" step="0.01" value="0" style="flex:1"/>
+          <span class="range-val" id="contrastVal">0</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Saturation</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="saturation" min="0" max="3" step="0.05" value="1" style="flex:1"/>
+          <span class="range-val" id="saturationVal">1</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Gamma</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="gamma" min="0.5" max="2" step="0.05" value="1" style="flex:1"/>
+          <span class="range-val" id="gammaVal">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:10px">
+      <label>Hue shift (degrees)</label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="range" id="hue" min="-180" max="180" step="1" value="0" style="flex:1"/>
+        <span class="range-val" id="hueVal">0°</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost" style="font-size:12px;padding:6px 14px" onclick="resetColor()">Reset color</button>
+  </div>
+
+  <div id="ac-sharpen" class="hidden">
+    <div class="grid2">
+      <div class="field">
+        <label>Sharpen strength</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="sharpen" min="0" max="5" step="0.1" value="0" style="flex:1"/>
+          <span class="range-val" id="sharpenVal">0</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Denoise (hqdn3d)</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="denoise" min="0" max="10" step="0.5" value="0" style="flex:1"/>
+          <span class="range-val" id="denoiseVal">0</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="field">
+        <label>Stabilization</label>
+        <select id="stabilize">
+          <option value="none">None</option>
+          <option value="deshake">Deshake (light)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5: Encode -->
+<div class="card">
+  <div class="card-header"><span class="card-title">5 · Encode &amp; download</span></div>
+
+  <div id="bitrateEstimate" style="margin-bottom:1rem">
+    <div style="font-size:12px;color:var(--g500);margin-bottom:8px;font-weight:600">Estimated output</div>
+    <div class="bitrate-row">
+      <span class="bitrate-label">Video bitrate</span>
+      <div class="bitrate-track"><div class="bitrate-fill" id="bfVideo" style="background:var(--b500);width:0%"></div></div>
+      <span class="bitrate-num" id="bnVideo">— Mbps</span>
+    </div>
+    <div class="bitrate-row">
+      <span class="bitrate-label">Audio bitrate</span>
+      <div class="bitrate-track"><div class="bitrate-fill" id="bfAudio" style="background:var(--b300);width:0%"></div></div>
+      <span class="bitrate-num" id="bnAudio">— kbps</span>
+    </div>
+    <div class="bitrate-row">
+      <span class="bitrate-label">Est. file size</span>
+      <div class="bitrate-track"><div class="bitrate-fill" id="bfSize" style="background:var(--g300);width:0%"></div></div>
+      <span class="bitrate-num" id="bnSize">—</span>
+    </div>
+  </div>
+
+  <div id="progressArea" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span id="prog-label">Initializing…</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="bar-bg"><div class="bar" id="bar"></div></div>
+      <div class="speed-row">
+        <span>⏱ elapsed: <span id="elapsed">0s</span></span>
+        <span>⚡ speed: <span id="encSpeed">—</span></span>
+        <span>🕐 eta: <span id="eta">—</span></span>
+      </div>
+    </div>
+    <div class="log-wrap">
+      <button class="log-toggle" onclick="toggleLog()">▶ show ffmpeg log</button>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <div id="doneArea" class="hidden">
+    <div class="size-comparison">
+      <div class="size-box">
+        <div class="size-num" id="origSize">—</div>
+        <div class="size-lbl">original</div>
+      </div>
+      <div class="size-arrow">→</div>
+      <div class="size-box">
+        <div class="size-num" id="newSize">—</div>
+        <div class="size-lbl">optimized</div>
+      </div>
+      <div class="size-change" id="sizeChange">—</div>
+    </div>
+    <div class="summary-grid" id="encodeSummary"></div>
+  </div>
+
+  <div class="btn-row" style="margin-top:1rem">
+    <button class="btn btn-primary" id="encodeBtn">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+      Encode for TikTok
+    </button>
+    <button class="btn btn-ghost" id="cancelBtn" style="display:none">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Cancel
+    </button>
+    <a class="btn btn-success hidden" id="dlLink" download>
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download
+    </a>
+    <span class="badge badge-done hidden" id="doneBadge">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      Done
+    </span>
+  </div>
+</div>
+
+<footer>TikBoost · FFmpeg WASM · 100% client-side · no data leaves your device</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+<script>
+const {FFmpeg} = FFmpegWASM;
+const {fetchFile, toBlobURL} = FFmpegUtil;
+
+let ffmpeg = null, videoFile = null, videoDuration = 0;
+let trimStartRatio = 0, trimEndRatio = 1;
+let encodeStartTime = 0, elapsedTimer = null;
+let cancelled = false;
+
+// Presets
+const PRESETS = {
+  'tiktok-v': {res:'1080x1920',crf:18,preset:'medium',fps:'source',tip:'Vertical 1080×1920 at CRF 18 — optimal for TikTok vertical feed. Stays sharp after their re-compression.'},
+  'tiktok-h': {res:'1920x1080',crf:18,preset:'medium',fps:'source',tip:'Horizontal 1080×1920 — for TikTok landscape mode. High bitrate source survives re-compression.'},
+  'yt-shorts': {res:'1080x1920',crf:16,preset:'slow',fps:'60',tip:'YouTube Shorts — CRF 16 for extra headroom. YouTube\'s VP9 encoder benefits from high-quality H.264 source.'},
+  'ig-reels': {res:'1080x1920',crf:18,preset:'medium',fps:'30',tip:'Instagram Reels — 30fps at 1080p. Instagram targets ~3.5 Mbps; starting high keeps your video clean.'},
+  'custom': {tip:'Manual mode — configure everything yourself.'}
+};
+
+// DOM refs
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const videoSection = document.getElementById('videoSection');
+const videoWrap = document.getElementById('videoWrap');
+const videoPlayer = document.getElementById('videoPlayer');
+const playOverlay = document.getElementById('playOverlay');
+const fileStatus = document.getElementById('fileStatus');
+const svDur = document.getElementById('sv-dur');
+const svRes = document.getElementById('sv-res');
+const svSize = document.getElementById('sv-size');
+const svFps = document.getElementById('sv-fps');
+const trimTrack = document.getElementById('trimTrack');
+const trimFill = document.getElementById('trimFill');
+const trimStartEl = document.getElementById('trimStart');
+const trimEndEl = document.getElementById('trimEnd');
+const trimStartLabel = document.getElementById('trimStartLabel');
+const trimEndLabel = document.getElementById('trimEndLabel');
+const trimDur = document.getElementById('trimDur');
+const encodeBtn = document.getElementById('encodeBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const progressArea = document.getElementById('progressArea');
+const bar = document.getElementById('bar');
+const progLabel = document.getElementById('prog-label');
+const progPct = document.getElementById('prog-pct');
+const logEl = document.getElementById('log');
+const dlLink = document.getElementById('dlLink');
+const doneBadge = document.getElementById('doneBadge');
+const doneArea = document.getElementById('doneArea');
+const origSize = document.getElementById('origSize');
+const newSize = document.getElementById('newSize');
+const sizeChange = document.getElementById('sizeChange');
+const encodeSummary = document.getElementById('encodeSummary');
+const elapsedEl = document.getElementById('elapsed');
+const encSpeedEl = document.getElementById('encSpeed');
+const etaEl = document.getElementById('eta');
+const advancedPanel = document.getElementById('advancedPanel');
+
+// Helpers
+function fmt(b){if(b>1e9)return(b/1e9).toFixed(2)+' GB';if(b>1e6)return(b/1e6).toFixed(1)+' MB';return(b/1e3).toFixed(0)+' KB'}
+function fmtDur(s){const m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+(sec<10?'0':'')+sec}
+function fmtDurFull(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.round(s%60);return h>0?h+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'):m+':'+String(sec).padStart(2,'0')}
+
+// Drop / file
+dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('over')});
+dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('over'));
+dropzone.addEventListener('drop',e=>{e.preventDefault();dropzone.classList.remove('over');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0])});
+fileInput.addEventListener('change',()=>{if(fileInput.files[0])handleFile(fileInput.files[0])});
+
+function handleFile(f){
+  videoFile = f;
+  fileStatus.textContent = f.name.length>24?f.name.slice(0,22)+'…':f.name;
+  svSize.textContent = fmt(f.size);
+  videoSection.classList.remove('hidden');
+  doneArea.classList.add('hidden');
+  progressArea.classList.add('hidden');
+  dlLink.classList.add('hidden');
+  doneBadge.classList.add('hidden');
+  bar.style.width='0';
+  bar.classList.remove('done');
+  logEl.textContent='';
+  encodeBtn.disabled=false;
+
+  const url = URL.createObjectURL(f);
+  videoPlayer.src = url;
+  videoWrap.style.display='block';
+  videoPlayer.onloadedmetadata = ()=>{
+    videoDuration = videoPlayer.duration;
+    svDur.textContent = fmtDurFull(videoDuration);
+    svRes.textContent = videoPlayer.videoWidth+'×'+videoPlayer.videoHeight;
+    trimStartRatio=0; trimEndRatio=1;
+    updateTrimUI();
+    updateEstimate();
+    generateWaveform();
+  };
+}
+
+// Video play
+playOverlay.addEventListener('click',()=>{
+  if(videoPlayer.paused){videoPlayer.play();playOverlay.style.opacity='0'}
+  else{videoPlayer.pause();playOverlay.style.opacity='1'}
+});
+videoPlayer.addEventListener('click',()=>{
+  if(videoPlayer.paused)videoPlayer.play();else videoPlayer.pause();
+});
+
+// Trim
+function updateTrimUI(){
+  const s=trimStartRatio*100, e=(1-trimEndRatio)*100;
+  trimFill.style.left=s+'%';
+  trimFill.style.right=e+'%';
+  trimStartEl.style.left=s+'%';
+  trimEndEl.style.right=e+'%';
+  const tStart=trimStartRatio*videoDuration;
+  const tEnd=trimEndRatio*videoDuration;
+  trimStartLabel.textContent=fmtDur(tStart);
+  trimEndLabel.textContent=fmtDur(tEnd);
+  trimDur.textContent='clip: '+fmtDur(tEnd-tStart);
+}
+
+function makeDraggable(el, onMove){
+  el.addEventListener('mousedown',e=>{
+    e.preventDefault();
+    const move=ev=>{
+      const rect=trimTrack.getBoundingClientRect();
+      const ratio=Math.max(0,Math.min(1,(ev.clientX-rect.left)/rect.width));
+      onMove(ratio);
+      updateTrimUI();
+      updateEstimate();
+    };
+    const up=()=>{document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up)};
+    document.addEventListener('mousemove',move);
+    document.addEventListener('mouseup',up);
+  });
+  el.addEventListener('touchstart',e=>{
+    const move=ev=>{
+      const rect=trimTrack.getBoundingClientRect();
+      const ratio=Math.max(0,Math.min(1,(ev.touches[0].clientX-rect.left)/rect.width));
+      onMove(ratio);
+      updateTrimUI();
+      updateEstimate();
+    };
+    const up=()=>{document.removeEventListener('touchmove',move);document.removeEventListener('touchend',up)};
+    document.addEventListener('touchmove',move);
+    document.addEventListener('touchend',up);
+  });
+}
+
+makeDraggable(trimStartEl,r=>{trimStartRatio=Math.min(r,trimEndRatio-0.01)});
+makeDraggable(trimEndEl,r=>{trimEndRatio=Math.max(r,trimStartRatio+0.01)});
+
+function generateWaveform(){
+  const wf=document.getElementById('waveform');
+  wf.innerHTML='';
+  for(let i=0;i<60;i++){
+    const h=Math.max(8,Math.random()*100);
+    const d=document.createElement('div');
+    d.className='wave-bar';
+    d.style.height=h+'%';
+    wf.appendChild(d);
+  }
+}
+
+// Presets
+document.querySelectorAll('.preset-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const p=PRESETS[btn.dataset.preset];
+    if(p.res){
+      document.getElementById('res').value=p.res;
+      document.getElementById('crfRange').value=p.crf;
+      document.getElementById('crfVal').textContent=p.crf;
+      document.getElementById('preset').value=p.preset;
+      document.getElementById('fps').value=p.fps;
+    }
+    document.getElementById('presetTip').textContent=p.tip;
+    updateEstimate();
+  });
+});
+
+// Advanced toggle
+document.getElementById('toggleAdvanced').addEventListener('click',()=>{
+  const show=advancedPanel.classList.toggle('hidden');
+  document.getElementById('toggleAdvanced').textContent=show?'+ Advanced':'– Advanced';
+});
+
+// Audio/color tabs
+document.querySelectorAll('#acTabs .tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('#acTabs .tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    ['audio','color','sharpen'].forEach(id=>{
+      const el=document.getElementById('ac-'+id);
+      if(el)el.classList.toggle('hidden',id!==tab.dataset.ac);
+    });
+  });
+});
+
+// Range displays
+function rangeLink(id,outId,suffix=''){
+  const el=document.getElementById(id), out=document.getElementById(outId);
+  el.addEventListener('input',()=>{out.textContent=el.value+(suffix?suffix:'');updateEstimate()});
+}
+rangeLink('crfRange','crfVal');
+rangeLink('volRange','volVal','%');
+rangeLink('brightness','brightnessVal');
+rangeLink('contrast','contrastVal');
+rangeLink('saturation','saturationVal');
+rangeLink('gamma','gammaVal');
+rangeLink('hue','hueVal','°');
+rangeLink('sharpen','sharpenVal');
+rangeLink('denoise','denoiseVal');
+document.getElementById('res').addEventListener('change',updateEstimate);
+document.getElementById('codec').addEventListener('change',updateEstimate);
+document.getElementById('abitrate').addEventListener('change',updateEstimate);
+
+function resetColor(){
+  ['brightness','contrast','hue'].forEach(id=>{document.getElementById(id).value=0;document.getElementById(id+'Val').textContent='0'+(id==='hue'?'°':'')});
+  document.getElementById('saturation').value=1;document.getElementById('saturationVal').textContent='1';
+  document.getElementById('gamma').value=1;document.getElementById('gammaVal').textContent='1';
+}
+
+// Bitrate estimate
+function updateEstimate(){
+  const crf=parseInt(document.getElementById('crfRange').value);
+  const resVal=document.getElementById('res').value;
+  const [w,h]=resVal.split('x').map(Number);
+  const px=w*h;
+  const dur=(videoDuration>0?(trimEndRatio-trimStartRatio)*videoDuration:60);
+  const baseBitrate=Math.round((px/1920/1080)*(55-crf*1.8)*100)/100;
+  const audioBps=parseInt(document.getElementById('abitrate').value);
+  const totalMbps=baseBitrate+audioBps/1000;
+  const estBytes=totalMbps*1e6/8*dur;
+
+  const maxRef=30;
+  document.getElementById('bfVideo').style.width=Math.min(100,baseBitrate/maxRef*100)+'%';
+  document.getElementById('bnVideo').textContent=baseBitrate.toFixed(1)+' Mbps';
+  document.getElementById('bfAudio').style.width=Math.min(100,audioBps/320*100)+'%';
+  document.getElementById('bnAudio').textContent=audioBps/1000+' Mbps';
+  document.getElementById('bfSize').style.width=Math.min(100,estBytes/500e6*100)+'%';
+  document.getElementById('bnSize').textContent=fmt(estBytes);
+}
+
+// Log toggle
+function toggleLog(){
+  logEl.classList.toggle('open');
+  document.querySelector('.log-toggle').textContent=logEl.classList.contains('open')?'▼ hide ffmpeg log':'▶ show ffmpeg log';
+}
+
+// Load FFmpeg
+async function loadFFmpeg(){
+  if(ffmpeg)return;
+  ffmpeg=new FFmpeg();
+  const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+  ffmpeg.on('log',({message})=>{
+    logEl.textContent+=message+'\n';
+    logEl.scrollTop=logEl.scrollHeight;
+    const m=message.match(/time=(\d+):(\d+):([\d.]+)/);
+    if(m&&videoDuration>0){
+      const t=parseInt(m[1])*3600+parseInt(m[2])*60+parseFloat(m[3]);
+      const clipDur=(trimEndRatio-trimStartRatio)*videoDuration;
+      if(clipDur>0){
+        const pct=Math.min(100,Math.round(t/clipDur*100));
+        bar.style.width=pct+'%';
+        progPct.textContent=pct+'%';
+        const elapsed=(Date.now()-encodeStartTime)/1000;
+        const speed=t/Math.max(1,elapsed);
+        encSpeedEl.textContent=speed.toFixed(1)+'x';
+        if(speed>0)etaEl.textContent=fmtDur(Math.max(0,(clipDur-t)/speed));
+      }
+    }
+    const speedM=message.match(/speed=\s*([\d.]+)x/);
+    if(speedM)encSpeedEl.textContent=speedM[1]+'x';
+  });
+  await ffmpeg.load({
+    coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),
+    wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm'),
+  });
+}
+
+// Cancel
+cancelBtn.addEventListener('click',()=>{
+  cancelled=true;
+  if(ffmpeg)ffmpeg.terminate();
+  ffmpeg=null;
+  cancelled=false;
+  progLabel.textContent='Cancelled';
+  encodeBtn.disabled=false;
+  cancelBtn.style.display='none';
+});
+
+// Encode
+encodeBtn.addEventListener('click',async()=>{
+  if(!videoFile){alert('Please select a video first.');return}
+  encodeBtn.disabled=true;
+  cancelBtn.style.display='inline-flex';
+  doneArea.classList.add('hidden');
+  dlLink.classList.add('hidden');
+  doneBadge.classList.add('hidden');
+  progressArea.classList.remove('hidden');
+  bar.style.width='0';
+  bar.classList.remove('done');
+  logEl.textContent='';
+  progLabel.textContent='Loading encoder…';
+  progPct.textContent='0%';
+  encodeStartTime=Date.now();
+  clearInterval(elapsedTimer);
+  elapsedTimer=setInterval(()=>{elapsedEl.textContent=Math.round((Date.now()-encodeStartTime)/1000)+'s'},1000);
+
+  try{
+    await loadFFmpeg();
+    progLabel.textContent='Writing source…';
+
+    const resVal=document.getElementById('res').value;
+    const [w,h]=resVal.split('x');
+    const crf=document.getElementById('crfRange').value;
+    const codec=document.getElementById('codec').value;
+    const presetVal=document.getElementById('preset').value;
+    const fpsVal=document.getElementById('fps').value;
+    const acodec=document.getElementById('acodec').value;
+    const abitrate=document.getElementById('abitrate').value;
+    const samplerate=document.getElementById('samplerate').value;
+    const vol=parseInt(document.getElementById('volRange').value);
+    const brightness=parseFloat(document.getElementById('brightness').value);
+    const contrast=parseFloat(document.getElementById('contrast').value);
+    const saturation=parseFloat(document.getElementById('saturation').value);
+    const gamma=parseFloat(document.getElementById('gamma').value);
+    const hue=parseFloat(document.getElementById('hue').value);
+    const sharpen=parseFloat(document.getElementById('sharpen').value);
+    const denoise=parseFloat(document.getElementById('denoise').value);
+    const stabilize=document.getElementById('stabilize').value;
+    const profile=document.getElementById('profile').value;
+    const level=document.getElementById('level').value;
+    const pixfmt=document.getElementById('pixfmt').value;
+    const maxBitrate=parseInt(document.getElementById('maxBitrate').value);
+    const bufSize=parseInt(document.getElementById('bufSize').value);
+
+    const ext=videoFile.name.slice(videoFile.name.lastIndexOf('.'));
+    const inName='input'+ext;
+    const outName='output_tiktok.mp4';
+
+    await ffmpeg.writeFile(inName,await fetchFile(videoFile));
+
+    // Build video filter chain
+    const vfParts=[];
+    vfParts.push(`scale=${w}:${h}:force_original_aspect_ratio=decrease`);
+    vfParts.push(`pad=${w}:${h}:(ow-iw)/2:(oh-ih)/2`);
+    if(brightness!==0||contrast!==0||saturation!==1||gamma!==1)
+      vfParts.push(`eq=brightness=${brightness}:contrast=${1+contrast}:saturation=${saturation}:gamma=${gamma}`);
+    if(hue!==0) vfParts.push(`hue=h=${hue}`);
+    if(sharpen>0) vfParts.push(`unsharp=5:5:${sharpen}:5:5:0`);
+    if(denoise>0) vfParts.push(`hqdn3d=${denoise}:${denoise}:${denoise*3}:${denoise*3}`);
+    if(stabilize==='deshake') vfParts.push('deshake');
+
+    // Build audio filter chain
+    const afParts=[];
+    if(vol!==100) afParts.push(`volume=${vol/100}`);
+
+    const args=['-i',inName];
+
+    // Trim
+    const tStart=trimStartRatio*videoDuration;
+    const tEnd=trimEndRatio*videoDuration;
+    if(tStart>0){args.push('-ss',tStart.toFixed(3))}
+    if(trimEndRatio<1){args.push('-to',tEnd.toFixed(3))}
+
+    // FPS
+    if(fpsVal!=='source') vfParts.push(`fps=${fpsVal}`);
+
+    args.push('-vf',vfParts.join(','));
+    args.push('-c:v',codec);
+    if(codec!=='copy'){
+      args.push('-preset',presetVal,'-crf',crf);
+      if(codec==='libx264'){args.push('-profile:v',profile,'-level',level)}
+      args.push('-pix_fmt',pixfmt,'-movflags','+faststart');
+      if(maxBitrate>0){args.push('-maxrate',maxBitrate+'k','-bufsize',(bufSize||maxBitrate*2)+'k')}
+    }
+    if(acodec==='copy'){
+      args.push('-c:a','copy');
+    } else {
+      args.push('-c:a',acodec,'-b:a',abitrate,'-ar',samplerate);
+      if(afParts.length>0) args.push('-af',afParts.join(','));
+    }
+    args.push(outName);
+
+    progLabel.textContent='Encoding…';
+    await ffmpeg.exec(args);
+
+    const data=await ffmpeg.readFile(outName);
+    const blob=new Blob([data.buffer],{type:'video/mp4'});
+    const url=URL.createObjectURL(blob);
+    dlLink.href=url;
+    dlLink.download='tiktok_'+videoFile.name.replace(/\.[^.]+$/,'')+'.mp4';
+
+    bar.style.width='100%';
+    bar.classList.add('done');
+    progPct.textContent='100%';
+    progLabel.textContent='Complete!';
+
+    // Summary
+    origSize.textContent=fmt(videoFile.size);
+    newSize.textContent=fmt(blob.size);
+    const diff=((blob.size-videoFile.size)/videoFile.size*100).toFixed(1);
+    sizeChange.textContent=(diff>0?'+':'')+diff+'%';
+    sizeChange.className='size-change '+(blob.size<videoFile.size?'smaller':'bigger');
+    const totalElapsed=Math.round((Date.now()-encodeStartTime)/1000);
+    encodeSummary.innerHTML=`
+      <div class="summary-row"><span class="summary-key">Resolution</span><span class="summary-val">${w}×${h}</span></div>
+      <div class="summary-row"><span class="summary-key">Codec</span><span class="summary-val">${codec}</span></div>
+      <div class="summary-row"><span class="summary-key">CRF</span><span class="summary-val">${crf}</span></div>
+      <div class="summary-row"><span class="summary-key">Preset</span><span class="summary-val">${presetVal}</span></div>
+      <div class="summary-row"><span class="summary-key">Audio</span><span class="summary-val">${acodec==='copy'?'copy':abitrate}</span></div>
+      <div class="summary-row"><span class="summary-key">Encode time</span><span class="summary-val">${totalElapsed}s</span></div>
+    `;
+    doneArea.classList.remove('hidden');
+    dlLink.classList.remove('hidden');
+    doneBadge.classList.remove('hidden');
+  } catch(e){
+    if(!cancelled){
+      progLabel.textContent='Error — see log';
+      logEl.textContent+='\n'+e.toString();
+      logEl.classList.add('open');
+    }
+  }
+  clearInterval(elapsedTimer);
+  encodeBtn.disabled=false;
+  cancelBtn.style.display='none';
+});
+
+// Init estimate
+updateEstimate();
+</script>
+</body>
+</html>
